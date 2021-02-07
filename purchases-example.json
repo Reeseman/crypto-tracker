@@ -1,0 +1,24 @@
+[
+    {
+        "comment1": "Copy + paste this file into your local purchases.json to begin!",
+        "comment2": "The format of this file is strict, must be totally valid json.",
+        "comment3": "For the 'coin' field, you can use upper or lower case but it must be a valid symbol.",
+        "comment4": "For example, 'coin': 'ASDF' will result in a garbage row.",
+        "comment5": "Fields 'usd_spent' and 'amount' are both floats.",
+        "comment6": "This file is useful as a purchase history. You can put the same coin 1-n times,",
+        "comment7": "or you can pre-aggregate them into a sum. Up to you.",
+        "coin": "BTC",
+        "usd_spent": 1000,
+        "amount": 295.4534
+    },
+    {
+        "coin": "BTC",
+        "usd_spent": 1000,
+        "amount": 295.4534
+    },
+    {
+        "coin": "ETH",
+        "usd_spent": 3000,
+        "amount": 1574.843
+    }
+]

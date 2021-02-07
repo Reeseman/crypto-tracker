@@ -1,0 +1,9 @@
+{
+    "comment1": "Copy + paste this file into your local targets.json to begin!",
+    "comment2": "The format of this file is strict, must be totally valid json.",
+    "comment3": "Adding targets is optional. You don't need a target for every",
+    "comment4": "coin you have in purchases. You can have any in here.",
+    "comment5": "Examples:",
+    "BTC": 50000,
+    "ETH": 2000
+}
