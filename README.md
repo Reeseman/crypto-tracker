@@ -1,5 +1,7 @@
 # Crypto Tracker
 
+Command-line interface for checking your crypto without signing in to any website or app
+
 ## Overview
 
 If:

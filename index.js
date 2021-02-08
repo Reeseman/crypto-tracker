@@ -50,7 +50,7 @@ request("https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=" + tsymsRe
         const price = 1/body[coinInfo['name']];
         coinInfo['Current Price'] = '$' + price.toFixed(2);
         coinInfo['Cost Basis'] = '$' + (coinInfo['usd_spent']/coinInfo['total_coin']).toFixed(2);
-        coinInfo['Spread %'] = (price / (coinInfo['usd_spent']/coinInfo['total_coin'])).toFixed(2);
+        coinInfo['Multiplier'] = (price / (coinInfo['usd_spent']/coinInfo['total_coin'])).toFixed(2);
         const coinInUsd = turnCryptoIntoUsd(body[coinInfo['name']], coinInfo['total_coin']);
         coinInfo['Current Value'] = coinInUsd.toFixed(2);
         currentUsd += coinInUsd;
@@ -62,7 +62,7 @@ request("https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=" + tsymsRe
         aggregate[key]['Total Investment'] = '$' + aggregate[key]['usd_spent'];
     }
 
-    console.table(aggregate, ['Coins', 'Total Investment', 'Current Value', 'Cost Basis', 'Current Price', 'Spread %', 'Target Price', 'Total Profit']);
+    console.table(aggregate, ['Coins', 'Total Investment', 'Current Value', 'Cost Basis', 'Current Price', 'Multiplier', 'Target Price', 'Total Profit']);
 
 	console.log("\n.....Total initial worth: $" + initialUsd);
 	console.log(  ".....Total current worth: $" + currentUsd);
