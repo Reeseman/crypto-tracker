@@ -3,7 +3,9 @@ const fs = require('fs');
 
 const ESTIMATED_TAX_RATE = 0.2;
 
-fs.readFile('./purchases.json', 'utf8', (err, purchasesJsonString) => {
+const dir = process.cwd();
+
+fs.readFile(`${dir}/purchases.json`, 'utf8', (err, purchasesJsonString) => {
 
 if (purchasesJsonString == null) {
     console.log("TODO: 'purchases.json' not set up yet");
@@ -12,7 +14,7 @@ if (purchasesJsonString == null) {
 
 const purchases = JSON.parse(purchasesJsonString);
 
-fs.readFile('./targets.json', 'utf8', (err, targetsJsonString) => {
+fs.readFile(`${dir}/targets.json`, 'utf8', (err, targetsJsonString) => {
 
 const targets = targetsJsonString == null ? {} : JSON.parse(targetsJsonString);
 
