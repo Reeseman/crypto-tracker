@@ -3,7 +3,7 @@ const fs = require('fs');
 
 const ESTIMATED_TAX_RATE = 0.2;
 
-const dir = process.cwd();
+const dir = __dirname;
 
 fs.readFile(`${dir}/purchases.json`, 'utf8', (err, purchasesJsonString) => {
 
