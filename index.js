@@ -51,6 +51,7 @@ request("https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=" + tsymsRe
         coinInfo['Current Price'] = '$' + price.toFixed(2);
         coinInfo['Cost Basis'] = '$' + (coinInfo['usd_spent']/coinInfo['total_coin']).toFixed(2);
         coinInfo['Multiplier'] = (price / (coinInfo['usd_spent']/coinInfo['total_coin'])).toFixed(2);
+        coinInfo['Target Multiplier'] = (targets[key] / (coinInfo['usd_spent']/coinInfo['total_coin'])).toFixed(2);
         const coinInUsd = turnCryptoIntoUsd(body[coinInfo['name']], coinInfo['total_coin']);
         coinInfo['Current Value'] = coinInUsd.toFixed(2);
         currentUsd += coinInUsd;
@@ -58,22 +59,53 @@ request("https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=" + tsymsRe
 
     for (const key in aggregate) {
         aggregate[key]['Total Profit'] = '$' + (aggregate[key]['Current Value'] - aggregate[key]['usd_spent']).toFixed(2);
+        aggregate[key]['Target Profit'] = '$' + (targets[key] * aggregate[key]['Coins'] - aggregate[key]['usd_spent']).toFixed(2);
         aggregate[key]['Current Value'] = '$' + aggregate[key]['Current Value']
         aggregate[key]['Total Investment'] = '$' + aggregate[key]['usd_spent'];
     }
+    var newAgg = sortAggByMultiplier(aggregate);
 
-    console.table(aggregate, ['Coins', 'Total Investment', 'Current Value', 'Cost Basis', 'Current Price', 'Multiplier', 'Target Price', 'Total Profit']);
+    console.table(newAgg, [
+        'Coins',
+        'Total Investment',
+        'Current Value',
+        'Cost Basis',
+        'Target Price',
+        'Current Price',
+        'Target Multiplier',
+        'Multiplier',
+        'Target Profit',
+        'Total Profit']);
 
 	console.log("\n.....Total initial worth: $" + initialUsd);
 	console.log(  ".....Total current worth: $" + currentUsd);
 	console.log(  "Total current real worth: $" + (initialUsd + (currentUsd - initialUsd) * (1 - ESTIMATED_TAX_RATE)));
-	console.log(  "........Total gains: $" + (currentUsd - initialUsd));
+	console.log("\n........Total gains: $" + (currentUsd - initialUsd));
 	console.log(  "......Posttax gains: $" + (currentUsd - initialUsd) * (1 - ESTIMATED_TAX_RATE));
 });
 
 
 })
 })
+
+function sortAggByMultiplier(aggregate) {
+    var newAgg = {}
+    var iterations = Object.keys(aggregate).length;
+    for (var i = 0; i < iterations; i += 1) {
+        var maxMultiplier = null;
+        var maxMultiplierKey = null;
+        for (const key in aggregate) {
+            if (maxMultiplier == null || parseFloat(aggregate[key]['Multiplier']) > maxMultiplier) {
+                maxMultiplier = parseFloat(aggregate[key]['Multiplier']);
+                maxMultiplierKey = key;
+            }
+        }
+        console.log(maxMultiplierKey);
+        newAgg[maxMultiplierKey] = aggregate[maxMultiplierKey];
+        delete aggregate[maxMultiplierKey];
+    }
+    return newAgg;
+}
 
 function turnCryptoIntoUsd(converter, cryptoAmount) {
 	return cryptoAmount * (1.0 / converter);
