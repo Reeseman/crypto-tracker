@@ -100,7 +100,6 @@ function sortAggByMultiplier(aggregate) {
                 maxMultiplierKey = key;
             }
         }
-        console.log(maxMultiplierKey);
         newAgg[maxMultiplierKey] = aggregate[maxMultiplierKey];
         delete aggregate[maxMultiplierKey];
     }
