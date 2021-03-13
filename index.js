@@ -52,6 +52,7 @@ request("https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=" + tsymsRe
         coinInfo['Cost Basis'] = '$' + (coinInfo['usd_spent']/coinInfo['total_coin']).toFixed(2);
         coinInfo['Multiplier'] = (price / (coinInfo['usd_spent']/coinInfo['total_coin'])).toFixed(2);
         coinInfo['Target Multiplier'] = (targets[key] / (coinInfo['usd_spent']/coinInfo['total_coin'])).toFixed(2);
+        coinInfo['Progress'] = `${Math.round(100 * coinInfo['Multiplier'] / coinInfo['Target Multiplier'])}%`;
         const coinInUsd = turnCryptoIntoUsd(body[coinInfo['name']], coinInfo['total_coin']);
         coinInfo['Current Value'] = coinInUsd.toFixed(2);
         currentUsd += coinInUsd;
@@ -73,6 +74,7 @@ request("https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=" + tsymsRe
         'Target Price',
         'Current Price',
         'Target Multiplier',
+        'Progress',
         'Multiplier',
         'Target Profit',
         'Total Profit']);
