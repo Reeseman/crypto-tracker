@@ -49,10 +49,11 @@ request("https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=" + tsymsRe
         coinInfo['Coins'] = coinInfo['total_coin'];
         const price = 1/body[coinInfo['name']];
         coinInfo['Current Price'] = '$' + price.toFixed(2);
-        coinInfo['Cost Basis'] = '$' + (coinInfo['usd_spent']/coinInfo['total_coin']).toFixed(2);
+        const costBasis = coinInfo['usd_spent']/coinInfo['total_coin'];
+        coinInfo['Cost Basis'] = '$' + costBasis.toFixed(2);
         coinInfo['Multiplier'] = (price / (coinInfo['usd_spent']/coinInfo['total_coin'])).toFixed(2);
         coinInfo['Target Mult'] = (targets[key] / (coinInfo['usd_spent']/coinInfo['total_coin'])).toFixed(2);
-        coinInfo['Progress'] = `${Math.round(100 * coinInfo['Multiplier'] / coinInfo['Target Mult'])}%`;
+        coinInfo['Progress'] = `${Math.round(100 * (price - costBasis) / (targets[key] - costBasis))}%`;
         const coinInUsd = turnCryptoIntoUsd(body[coinInfo['name']], coinInfo['total_coin']);
         coinInfo['Current Value'] = coinInUsd.toFixed(2);
         currentUsd += coinInUsd;
