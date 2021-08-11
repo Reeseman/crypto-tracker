@@ -42,11 +42,17 @@ for (const key in aggregate) {
     tsymsRequestValue += key + ',';
 }
 
-request("https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=" + tsymsRequestValue, function (error, response, body) {
-	body = JSON.parse(body);
+const apiRequest = "https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=" + tsymsRequestValue;
+request(apiRequest, function (error, response, body) {
+    if (body === undefined) {
+      console.log("API request to cryptocompare came back undefined: " + apiRequest);
+      return;
+    }
+    body = JSON.parse(body);
+    var ifAllGoesWell = 0;
     for (const key in aggregate) {
         var coinInfo = aggregate[key];
-        coinInfo['Coins'] = coinInfo['total_coin'];
+        coinInfo['Coins'] = coinInfo['total_coin'].toFixed(4);
         const price = 1/body[coinInfo['name']];
         coinInfo['Current Price'] = '$' + price.toFixed(2);
         const costBasis = coinInfo['usd_spent']/coinInfo['total_coin'];
@@ -63,6 +69,7 @@ request("https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=" + tsymsRe
         aggregate[key]['Total Profit'] = '$' + numberWithCommas((aggregate[key]['Current Value'] - aggregate[key]['usd_spent']).toFixed(0));
         const profit = targets[key] * aggregate[key]['Coins'] - aggregate[key]['usd_spent'];
         aggregate[key]['Target Profit'] = '$' + numberWithCommas(profit.toFixed(0));
+        ifAllGoesWell += profit;
         aggregate[key]['Current Value'] = '$' + aggregate[key]['Current Value']
         aggregate[key]['Investment'] = '$' + aggregate[key]['usd_spent'];
     }
@@ -80,6 +87,10 @@ request("https://min-api.cryptocompare.com/data/price?fsym=USD&tsyms=" + tsymsRe
         'Multiplier',
         'Target Profit',
         'Total Profit']);
+
+  var ifAllGoesWellTaxed = ifAllGoesWell * (1 - ESTIMATED_TAX_RATE);
+	console.log("\n.....If all goes well: $" + numberWithCommas(ifAllGoesWellTaxed.toFixed(2)));
+	console.log(  ".....If all goes well, final worth: $" + numberWithCommas((ifAllGoesWellTaxed + initialUsd).toFixed(2)));
 
 	console.log("\n.....Total initial worth: $" + numberWithCommas(initialUsd.toFixed(2)));
 	console.log(  ".....Total current worth: $" + numberWithCommas(currentUsd.toFixed(2)));
